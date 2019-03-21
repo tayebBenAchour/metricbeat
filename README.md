@@ -39,4 +39,4 @@ BSD
 Author Information
 ------------------
 
-Tomasz Baczynski <tbaczynski@bul-it.eu>
+Tomasz Baczynski
