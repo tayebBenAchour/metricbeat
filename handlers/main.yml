@@ -6,5 +6,5 @@
     name: metricbeat
     state: restarted
   when: service_default_state | default('started') == 'started'
-  tags: [  metricbeat ]
-
+  tags: [ metricbeat ]
+...
