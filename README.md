@@ -39,4 +39,4 @@ BSD
 Author Information
 ------------------
 
-Tomasz Baczynski
+Tomasz Baczyński
