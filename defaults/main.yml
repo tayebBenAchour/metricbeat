@@ -1,0 +1,20 @@
+---
+# defaults file for metricbeat
+es_apt_key: "https://artifacts.elastic.co/GPG-KEY-elasticsearch"
+es_apt_url: "deb https://artifacts.elastic.co/packages/{{ es_major_version }}/apt stable main"
+es_major_version: 6.x
+es_enable_pinning: true
+es_metricbeat_pinning_pkgs:
+  - { name: 'metricbeat', version: '{{ es_metricbeat_version }}', priority: 1000 }
+es_metricbeat_version: '6.6.*'
+
+es_metricbeat_output: 'elasticsearch' # can be elasticsearch or logstash
+es_metricbeat_output_elastic:
+  - localhost
+es_metricbeat_output_logstash:
+  - localhost
+
+es_metricbeat_monitoring: False
+es_metricbeat_modules_cli: []
+
+...

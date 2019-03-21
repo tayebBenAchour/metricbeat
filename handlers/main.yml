@@ -1,0 +1,10 @@
+---
+# handlers file for metricbeat
+- name: restart metricbeat
+  become: yes
+  service:
+    name: metricbeat
+    state: restarted
+  when: service_default_state | default('started') == 'started'
+  tags: [  metricbeat ]
+

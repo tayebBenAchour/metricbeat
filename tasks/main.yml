@@ -1,0 +1,72 @@
+---
+- name: Install prereq. pkg
+  apt:
+    name:
+      - apt-transport-https
+    state: present
+  tags: [ metricbeat ]
+
+- name: Add ElasticSearch repo key
+  apt_key:
+    url: "{{ es_apt_key }}"
+    state: present
+  tags: [ metricbeat ]
+
+- name: Add ElasticSearch repository
+  apt_repository:
+    repo: "{{ es_apt_url }}"
+    state: present
+  tags: [ metricbeat ]
+
+- name: Metricbeat | Apt pinning for pkgs
+  template:
+    src: "pinning.j2"
+    dest: "/etc/apt/preferences.d/{{ item.name }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ es_metricbeat_pinning_pkgs }}"
+  when:
+    - es_metricbeat_pinning_pkgs is defined
+    - es_metricbeat_pinning_pkgs
+  tags: [ metricbeat ]
+
+- name: Install Metricbeat package
+  apt:
+    name: metricbeat
+    state: present
+  tags: [ metricbeat ]
+
+- name: Create main Metricbeat config
+  template:
+    src: "metricbeat.yml.j2"
+    dest: "/etc/metricbeat/metricbeat.yml"
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart metricbeat
+  tags: [ metricbeat ]
+
+- name: Metricbeat enable modules from cli # noqa 305
+  shell: metricbeat modules enable {{ item.name }}
+  args:
+    creates: "/etc/metricbeat/modules.d/{{ item.name }}.yml"
+  loop:  "{{ es_metricbeat_modules_cli }}"
+  when: item.enabled
+  tags: [ metricbeat ]
+
+- name: Metricbeat disable modules from cli # noqa 305
+  shell: metricbeat modules disable {{ item.name|quote }}
+  args:
+    creates: "/etc/metricbeat/modules.d/{{ item.name }}.yml.disabled"
+  loop:  "{{ es_metricbeat_modules_cli }}"
+  when: not item.enabled
+  tags: [ metricbeat ]
+
+- name: Enable and start Metricbeat service
+  service:
+    name: metricbeat
+    enabled: yes
+    state: started
+  tags: [ metricbeat ]
+

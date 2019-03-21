@@ -1,0 +1,9 @@
+{% if es_enable_pinning %}
+{% for pkg in es_metricbeat_pinning_pkgs %}
+
+Package: {{ pkg.name }}
+Pin: version {{ pkg.version }}
+Pin-Priority: {{ pkg.priority }}
+{% endfor %}
+{% endif %}
+
