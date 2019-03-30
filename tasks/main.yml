@@ -51,7 +51,7 @@
   shell: metricbeat modules enable {{ item.name }}
   args:
     creates: "/etc/metricbeat/modules.d/{{ item.name }}.yml"
-  loop:  "{{ es_metricbeat_modules_cli }}"
+  loop: "{{ es_metricbeat_modules_cli }}"
   when: item.enabled
   tags: metricbeat
 
@@ -59,7 +59,7 @@
   shell: metricbeat modules disable {{ item.name|quote }}
   args:
     creates: "/etc/metricbeat/modules.d/{{ item.name }}.yml.disabled"
-  loop:  "{{ es_metricbeat_modules_cli }}"
+  loop: "{{ es_metricbeat_modules_cli }}"
   when: not item.enabled
   tags: metricbeat
 
