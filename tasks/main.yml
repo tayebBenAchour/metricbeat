@@ -3,6 +3,7 @@
   apt:
     name:
       - apt-transport-https
+      - gpg
     state: present
   tags: metricbeat
 
